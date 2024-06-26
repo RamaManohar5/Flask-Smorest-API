@@ -58,7 +58,7 @@ WORKDIR $PYSETUP_PATH
 EXPOSE 8000
 
 # Start command
-CMD ["poetry", "run", "uvicorn", "--reload", "restapi.asgi:application", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["sh", "./restapi/prod_entry_point.sh"]
 
 ####################################### Production ##############################################
 
