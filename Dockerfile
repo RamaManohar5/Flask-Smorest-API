@@ -84,11 +84,12 @@ COPY --from=python-base /app /app
 WORKDIR $PYSETUP_PATH
 
 # Copy application code
-#COPY ./restapi ./restapi
+#COPY ./restapi ./restapi 
 
 # Expose the application port
 EXPOSE 80
 
 # Entry point for production
 #ENTRYPOINT ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:80", "restapi.asgi:application"]
-ENTRYPOINT [ "gunicorn", "-w", "4", "--bind","0.0.0.0:80", "restapi:create_app()" ]
+#ENTRYPOINT [ "gunicorn", "-w", "4", "--bind","0.0.0.0:8500", "restapi:create_app()" ]
+CMD ["sh", "./restapi/prod_entry_point.sh"]

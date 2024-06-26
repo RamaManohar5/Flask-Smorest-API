@@ -15,6 +15,7 @@ from restapi.resources.user import blp as UserBluePrint
 
 
 # databases
+import psycopg2
 from restapi.db import db
 import restapi.models as models
 
@@ -28,6 +29,9 @@ from restapi.blocklists.blocklist import BLOCKLIST
 # database migration
 from flask_migrate import Migrate
 
+# environment variables
+from dotenv import load_dotenv
+
 # Configure logging
 '''
 logging.basicConfig(level=logging.INFO,
@@ -38,6 +42,8 @@ logging.basicConfig(level=logging.INFO,
 
 def create_app(db_url=None):
     app = Flask(__name__)
+    load_dotenv()
+    
     from restapi.main_views import sample_page
     app.register_blueprint(sample_page)
     #from restapi.stores.store_views import stores_page
