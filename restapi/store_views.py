@@ -16,11 +16,11 @@ def show_stores():
     try:
         template_name = "stores_home.html"
         page_title = "Stores Homepage"
-        logging.info(f"Attempting to render template: {template_name}")
+        #logging.info(f"Attempting to render template: {template_name}")
         welcome_note = "Welcome to the stores homepage"
         return render_template("stores_templates/stores_home.html", page_title=page_title, welcome_note=welcome_note) 
     except TemplateNotFound:
-        logging.error(f"Template not found: {template_name}")
+        #logging.error(f"Template not found: {template_name}")
         abort(404, description="Template restapi/templates/stores_templates/home.html not found")
 
 ###################### Stores Details ####################################
