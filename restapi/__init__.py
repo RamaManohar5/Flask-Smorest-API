@@ -29,10 +29,12 @@ from restapi.blocklists.blocklist import BLOCKLIST
 from flask_migrate import Migrate
 
 # Configure logging
+'''
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)s %(message)s',
                     handlers=[logging.FileHandler("restapi/logs/app.log"),
                               logging.StreamHandler()])
+'''
 
 def create_app(db_url=None):
     app = Flask(__name__)
