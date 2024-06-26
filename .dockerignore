@@ -1,0 +1,45 @@
+# Ignore Python cache files
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore Poetry virtual environments
+.venv/
+
+# Ignore macOS and Linux system files
+.DS_Store
+*.swp
+
+# Ignore git-related files and directories
+.git
+.gitignore
+
+# Ignore Dockerfile and docker-compose files if not needed in the image
+Dockerfile*
+docker-compose*
+docker*
+
+# Ignore local environment variables files
+.env
+*.env
+.venv
+*.venv
+
+# Ignore test and development files
+logs/
+tests/
+*.log
+*.md
+.vscode/
+.idea/
+*.iml
+
+# Ignore build artifacts
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# Ignore any other files or directories not needed in the Docker image
+node_modules/
