@@ -87,7 +87,8 @@ WORKDIR $PYSETUP_PATH
 #COPY ./restapi ./restapi
 
 # Expose the application port
-EXPOSE 8500
+EXPOSE 80
 
 # Entry point for production
-ENTRYPOINT ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:8500", "restapi.asgi:application"]
+#ENTRYPOINT ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:80", "restapi.asgi:application"]
+ENTRYPOINT [ "gunicorn", "-w", "4", "--bind","0.0.0.0:80", "restapi:create_app()" ]
