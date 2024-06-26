@@ -22,7 +22,7 @@ services:
     image: flask-prod-image
     container_name: flaks-prod-container
     ports:
-      - "8500:8500"
+      - "80:80"
     volumes:
       - .:/app
     networks:
