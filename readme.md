@@ -1,1 +1,1 @@
-# Flask "REST API" implementation with flask_smorest and marshmellow schmeas for data valivation
+# Flask "REST API" implementation with flask_smorest and marshmellow schmeas for data validation
