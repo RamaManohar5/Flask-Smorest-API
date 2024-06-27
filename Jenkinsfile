@@ -4,7 +4,7 @@ pipeline {
     // Environment setup
     environment {
         registryCredential = 'dockerhub_credentials_token' // Jenkins Credentials ID for Docker Hub
-        dockerImage = "Flask-Smorest-API:latest"
+        dockerImage = "Flask-Smorest-API"
         dockerRegistry = 'docker.io' // Docker registry hostname (e.g., Docker Hub)
         dockerHost = "tcp://docker-host:2376" // Docker host URL (if using a remote Docker host)
         githubCredentials = 'github_credentials_token' // Jenkins Credentials ID for GitHub
@@ -15,7 +15,7 @@ pipeline {
         stage("Clone Repository") {
             steps {
                 // Checkout your private GitHub repository using Jenkins credentials
-                git credentialsId: githubCredentials, url: 'https://github.com/RamaManohar5/Flask-Smorest-API.git'
+                git credentialsId: githubCredentials, url: 'https://github.com/RamaManohar5/Flask-Smorest-API.git', branch: 'main'
             }
         }
         
