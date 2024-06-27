@@ -20,7 +20,8 @@ pipeline {
             steps {
                 script {
                     // Build Docker image with the appropriate tag
-                    sh "docker build -t ${registry}:${BUILD_NUMBER} ."
+                    // sh "docker build -t ${registry}:${BUILD_NUMBER} ."
+                    sh "docker build -t ${registry} ."
                     echo 'Build Image Completed'
                 }
             }
@@ -40,7 +41,7 @@ pipeline {
             steps {
                 script {
                     // Push Docker image to Docker Hub
-                    sh "docker push ${registry}:${BUILD_NUMBER}"
+                    sh "docker push ${registry} "
                     echo 'Push Image Completed'
                 }
             }
