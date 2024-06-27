@@ -15,7 +15,7 @@ from restapi.blocklists.blocklist import BLOCKLIST
 import requests
 from dotenv import load_dotenv
 import os
-from tasks import send_user_registration_message
+from restapi.tasks import send_user_registration_message
 # redis and rq for tasks management
 import redis
 from rq import Queue
