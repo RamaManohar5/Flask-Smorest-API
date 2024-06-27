@@ -58,8 +58,8 @@ WORKDIR $PYSETUP_PATH
 # Expose the application port
 EXPOSE 8000
 
-# Start command
-CMD ["sh", "./restapi/prod_entry_point.sh"]
+# entry point for dev
+ENTRYPOINT ["sh", "./entry_point_dev.sh"]
 
 ####################################### Production ##############################################
 
@@ -91,6 +91,4 @@ COPY ./restapi ./restapi
 EXPOSE 80
 
 # Entry point for production
-#ENTRYPOINT ["gunicorn", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "--bind", "0.0.0.0:80", "restapi.asgi:application"]
-#ENTRYPOINT [ "gunicorn", "-w", "4", "--bind","0.0.0.0:8500", "restapi:create_app()" ]
-CMD ["sh", "./restapi/prod_entry_point.sh"]
+ENTRYPOINT ["sh", "./entry_point_prod.sh"]

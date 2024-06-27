@@ -15,20 +15,9 @@ from restapi.blocklists.blocklist import BLOCKLIST
 import requests
 from dotenv import load_dotenv
 import os
-from restapi.tasks import send_user_registration_message
-# redis and rq for tasks management
-import redis
-from rq import Queue
-from restapi.settings import REDIS_URL, QUEUES
-
-load_dotenv()
+from tasks import queue, send_user_registration_message
 
 blp = Blueprint("Users", "users", __name__, description="Operations on Users")
-
-connection = redis.from_url(
-        os.getenv("REDIS_URL")
-    )
-queue = Queue("emails", connection=connection)
 
 @blp.route("/register")
 class UserRegister(MethodView):
@@ -52,7 +41,7 @@ class UserRegister(MethodView):
 
         queue.enqueue(send_user_registration_message, user.email, user.username)
 
-        return {"message" : "user created"}
+        return {"message" : "user created"}, 201
 
 @blp.route("/user/<int:user_id>")
 class User(MethodView):
