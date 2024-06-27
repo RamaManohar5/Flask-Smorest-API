@@ -15,7 +15,7 @@ pipeline {
         stage("Clone Repository") {
             steps {
                 // Checkout your private GitHub repository using Jenkins credentials
-                git credentialsId: githubCredentials, url: 'https://github.com/RamaManohar5/Flask-Smorest-API.git', branch: 'main'
+                git credentialsId: githubCredentials, url: 'https://github.com/RamaManohar5/Flask-Smorest-API.git'
             }
         }
         
