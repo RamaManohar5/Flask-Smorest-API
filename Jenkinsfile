@@ -17,8 +17,7 @@ pipeline{
                 // checkout git repository
                // git 'https://github.com/RamaManohar5/Flask-Smorest-API.git'
                 // Checkout your private GitHub repository using Jenkins credentials
-                git branch: 'main',
-                git credentialsId: "${githubCredentials}", 
+                git branch: 'main', 
                 url: 'https://github.com/RamaManohar5/Flask-Smorest-API.git'
             }
         }
