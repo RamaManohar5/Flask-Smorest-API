@@ -7,6 +7,7 @@ pipeline{
         dockerImage = "my-image:latest"
         dockerRegistry = "docker.io" // Docker registry hostname (e.g., Docker Hub)
         dockerHost = "tcp://docker-host:2376" // Docker host URL (if using a remote Docker host)
+        githubCredentials = 
     }
 
     // staging 
@@ -14,9 +15,9 @@ pipeline{
         stage("Clone Repository"){
             steps{
                 // checkout git repository
-                git 'https://github.com/RamaManohar5/Flask-Smorest-API.git'
+               // git 'https://github.com/RamaManohar5/Flask-Smorest-API.git'
                 // Checkout your private GitHub repository using Jenkins credentials
-                // git credentialsId: 'your-github-credentials-id', url: 'https://github.com/RamaManohar5/Flask-Smorest-API.git'
+                git credentialsId: 'github_credentials_token', url: 'https://github.com/RamaManohar5/Flask-Smorest-API.git'
             }
         }
 
