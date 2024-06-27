@@ -32,6 +32,15 @@ services:
     env_file:
       - ./.env
     tty: true
+  
+  flask-repo:
+    image: ramamanohark555/flask_restful_api_repo:latest
+    container_name: flask-repo-container
+    networks:
+      - flask-network
+    env_file:
+      - ./.env
+    tty: true
 
 networks:
   flask-network:

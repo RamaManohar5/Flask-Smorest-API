@@ -165,5 +165,3 @@ docker-clean.sh
 docker-compose-build.sh
 instance/
 instance/*
-migrations/
-migrations/*
