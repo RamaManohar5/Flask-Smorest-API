@@ -9,6 +9,6 @@ flask db migrate
 # To apply all the changes
 flask db upgrade
 
-exec gunicorn -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:80 restapi.asgi:application 
+exec gunicorn -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:80 'restapi.application:create_application()' 
 
 #exec poetry run uvicorn --reload restapi.asgi:application --host 0.0.0.0 --port 8000
