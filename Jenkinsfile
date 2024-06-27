@@ -9,9 +9,9 @@ pipeline {
     }
 
     stages {
-        stage('Cloning our Git'){
+        stage('Cloning our Git') {
             steps {
-                git credentialsId: githubCredentials, url: "https://github.com/RamaManohar5/Flask-Smorest-API.git"
+                git credentialsId: githubCredentials, url: "https://github.com/RamaManohar5/Flask-Smorest-API.git", branch: 'main'
                 echo 'Git Checkout Completed'
             }
         }
