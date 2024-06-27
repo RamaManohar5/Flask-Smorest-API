@@ -19,6 +19,7 @@ from restapi.tasks import send_user_registration_message
 # redis and rq for tasks management
 import redis
 from rq import Queue
+from restapi.settings import REDIS_URL, QUEUES
 
 load_dotenv()
 
