@@ -16,12 +16,18 @@ import requests
 from dotenv import load_dotenv
 import os
 from tasks import send_user_registration_message
-from rq import queue
+# redis and rq for tasks management
+import redis
+from rq import Queue
 
 load_dotenv()
 
 blp = Blueprint("Users", "users", __name__, description="Operations on Users")
 
+connection = redis.from_url(
+        os.getenv("REDIS_URL")
+    )
+queue = Queue("emails", connection=connection)
 
 @blp.route("/register")
 class UserRegister(MethodView):

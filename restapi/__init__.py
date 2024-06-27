@@ -31,10 +31,6 @@ from flask_migrate import Migrate
 # environment variables
 from dotenv import load_dotenv
 
-# redis and rq for tasks management
-import redis
-from rq import Queue
-
 # Configure logging
 '''
 logging.basicConfig(level=logging.INFO,
@@ -47,10 +43,6 @@ def create_app(db_url=None):
     app = Flask(__name__)
     load_dotenv()
     
-    connection = redis.from_url(
-        os.getenv("REDIS_URL")
-    )
-    app.queue = Queue("emails", connection=connection)
     from restapi.main_views import sample_page
     app.register_blueprint(sample_page)
     #from restapi.stores.store_views import stores_page
