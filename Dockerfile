@@ -21,6 +21,10 @@ RUN apk update \
 
 WORKDIR $PYSETUP_PATH
 
+# copy the source code, can hide it if use docker-compose and link it local volume for frequent changes.
+
+COPY . $PYSETUP_PATH
+
 # Copy Poetry configuration files
 COPY pyproject.toml poetry.lock ./
 
@@ -50,9 +54,6 @@ COPY pyproject.toml poetry.lock ./
 RUN poetry install --no-interaction --no-ansi
 
 WORKDIR $PYSETUP_PATH
-
-# Copy application code
-#COPY ./restapi ./restapi
 
 # Expose the application port
 EXPOSE 8000
@@ -84,7 +85,7 @@ COPY --from=python-base /app /app
 WORKDIR $PYSETUP_PATH
 
 # Copy application code
-#COPY ./restapi ./restapi 
+COPY ./restapi ./restapi 
 
 # Expose the application port
 EXPOSE 80
