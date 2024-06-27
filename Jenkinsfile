@@ -4,7 +4,7 @@ pipeline {
     // Environment setup
     environment {
         registryCredential = 'dockerhub_credentials_token' // Jenkins Credentials ID for Docker Hub
-        dockerImage = "Flask-Smorest-MarshMellow-Postgres-Redis-RESTful-API:latest"
+        dockerImage = "Flask-Smorest-API:latest"
         dockerRegistry = 'https://docker.io' // Docker registry hostname (e.g., Docker Hub)
         dockerHost = "tcp://docker-host:2376" // Docker host URL (if using a remote Docker host)
         githubCredentials = 'github_credentials_token' // Jenkins Credentials ID for GitHub
