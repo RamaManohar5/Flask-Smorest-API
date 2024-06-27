@@ -17,7 +17,7 @@ pipeline{
                 // checkout git repository
                // git 'https://github.com/RamaManohar5/Flask-Smorest-API.git'
                 // Checkout your private GitHub repository using Jenkins credentials
-                git credentialsId: ${githubCredentials} , url: 'https://github.com/RamaManohar5/Flask-Smorest-API.git'
+                git credentialsId: "${githubCredentials}" , url: 'https://github.com/RamaManohar5/Flask-Smorest-API.git'
             }
         }
 
@@ -25,7 +25,7 @@ pipeline{
             steps{
                 script{
                     // build docker image using Dockerfile in the repository
-                    docker.build(${dockerRegistry}/${dockerImage})
+                    docker.build("${dockerRegistry}"/"${dockerImage}")
                 }
             }
         }
@@ -34,7 +34,7 @@ pipeline{
             steps{
                 script{
                     // authenticate the registry
-                    docker.withRegistry(${dockerRegistry}, ${registryCredential})
+                    docker.withRegistry("${dockerRegistry}", "${registryCredential}")
                     // push to the docker
                     dockerImage.push()
                 }
