@@ -3,11 +3,19 @@ pipeline {
     
     environment {
         DOCKER_IMAGE = 'Flask-Smorest-API'
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub_token')
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-credentials-token')
         DOCKERHUB_REPO = 'ramamanohark555/flask-smorest-api'
+        GITHUB_CREDENTIALS = credentials('github_credentials_token')
     }
     
     stages {
+        stage('Checkout Git Repository') {
+            steps {
+                // Checkout your private GitHub repository using Jenkins credentials
+                git credentialsId: GITHUB_CREDENTIALS, url: 'https://github.com/RamaManohar5/Flask-Smorest-API.git', branch: 'main'
+            }
+        }
+
         stage('Login to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDENTIALS, usernameVariable: 'DOCKERHUB_CREDENTIALS_USR', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW')]) {
@@ -16,21 +24,7 @@ pipeline {
             }
         }
         
-        stage('Clean Up Existing Docker Resources') {
-            steps {
-                script {
-                    echo 'Cleaning up existing Docker containers and images...'
-                    sh """
-                        docker ps -a --filter "ancestor=${DOCKER_IMAGE}" --format "{{.ID}}" | xargs -r docker rm -f
-                        docker ps -a --filter "name=${DOCKER_IMAGE}_container" --format "{{.ID}}" | xargs -r docker rm -f
-                        docker rmi -f ${DOCKER_IMAGE} || true
-                        docker rmi -f ${DOCKERHUB_REPO} || true
-                    """
-                }
-            }
-        }
-        
-        stage('Build and Push Docker Image') {
+        stage('Push Docker Image') {
             steps {
                 script {
                     echo 'Building Docker image...'
@@ -74,6 +68,12 @@ pipeline {
                     echo 'Checking container logs...'
                     sh "docker logs ${DOCKER_IMAGE}_container || true"
                 }
+            }
+        }
+        
+        stage('Logout from Docker Hub') {
+            steps {
+                sh 'docker logout'
             }
         }
     }
