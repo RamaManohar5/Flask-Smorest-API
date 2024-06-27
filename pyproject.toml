@@ -21,6 +21,7 @@ passlib = "^1.7.4"
 flask-migrate = "^4.0.7"
 psycopg2-binary = "^2.9.9"
 requests = "^2.32.3"
+rq = "^1.16.2"
 
 [tool.poetry.group.dev.dependencies]
 flake8 = "^7.1.0"

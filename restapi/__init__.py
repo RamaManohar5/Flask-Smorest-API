@@ -13,7 +13,6 @@ from restapi.resources.store import blp as StoreBluePrint
 from restapi.resources.tag import blp as TagBluePrint
 from restapi.resources.user import blp as UserBluePrint
 
-
 # databases
 import psycopg2
 from restapi.db import db
@@ -32,6 +31,10 @@ from flask_migrate import Migrate
 # environment variables
 from dotenv import load_dotenv
 
+# redis and rq for tasks management
+import redis
+from rq import Queue
+
 # Configure logging
 '''
 logging.basicConfig(level=logging.INFO,
@@ -44,10 +47,15 @@ def create_app(db_url=None):
     app = Flask(__name__)
     load_dotenv()
     
+    connection = redis.from_url(
+        os.getenv("REDIS_URL")
+    )
+    app.queue = Queue("emails", connection=connection)
     from restapi.main_views import sample_page
     app.register_blueprint(sample_page)
     #from restapi.stores.store_views import stores_page
     #app.register_blueprint(stores_page))
+    app.config["PROPAGATE_EXCEPTIONS"] = True,
     app.config["API_TITLE"] = "Stores REST API"
     app.config["API_VERSION"] = "v1"
     app.config["OPENAPI_VERSION"] = "3.0.3"
