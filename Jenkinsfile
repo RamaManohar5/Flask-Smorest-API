@@ -1,77 +1,100 @@
 pipeline {
     agent any
     
-    // Environment setup
     environment {
-        registryCredential = 'dockerhub_credentials_token' // Jenkins Credentials ID for Docker Hub
-        dockerImage = "Flask-Smorest-API"
-        dockerRegistry = 'docker.io' // Docker registry hostname (e.g., Docker Hub)
-        dockerHost = "tcp://docker-host:2376" // Docker host URL (if using a remote Docker host)
-        githubCredentials = 'github_credentials_token' // Jenkins Credentials ID for GitHub
+        DOCKER_IMAGE = 'Flask-Smorest-API'
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub_token')
+        DOCKERHUB_REPO = 'ramamanohark555/flask-smorest-api'
     }
     
-    // Stages
     stages {
-        stage("Clone Repository") {
+        stage('Login to Docker Hub') {
             steps {
-                // Checkout your private GitHub repository using Jenkins credentials
-                git credentialsId: githubCredentials, url: 'https://github.com/RamaManohar5/Flask-Smorest-API.git', branch: 'main'
+                withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDENTIALS, usernameVariable: 'DOCKERHUB_CREDENTIALS_USR', passwordVariable: 'DOCKERHUB_CREDENTIALS_PSW')]) {
+                    sh "docker login -u $DOCKERHUB_CREDENTIALS_USR -p $DOCKERHUB_CREDENTIALS_PSW"
+                }
             }
         }
         
-        stage("Docker Login") {
+        stage('Clean Up Existing Docker Resources') {
             steps {
                 script {
-                    // Login to Docker registry
-                    docker.withRegistry("${dockerRegistry}", "${registryCredential}") {
-                        // Perform Docker login
-                        docker.login()
+                    echo 'Cleaning up existing Docker containers and images...'
+                    sh """
+                        docker ps -a --filter "ancestor=${DOCKER_IMAGE}" --format "{{.ID}}" | xargs -r docker rm -f
+                        docker ps -a --filter "name=${DOCKER_IMAGE}_container" --format "{{.ID}}" | xargs -r docker rm -f
+                        docker rmi -f ${DOCKER_IMAGE} || true
+                        docker rmi -f ${DOCKERHUB_REPO} || true
+                    """
+                }
+            }
+        }
+        
+        stage('Build and Push Docker Image') {
+            steps {
+                script {
+                    echo 'Building Docker image...'
+                    sh "docker build -t ${DOCKER_IMAGE} ."
+                    echo 'Tagging Docker image...'
+                    sh "docker tag ${DOCKER_IMAGE} ${DOCKERHUB_REPO}"
+                    echo 'Pushing Docker image to Docker Hub...'
+                    sh "docker push ${DOCKERHUB_REPO}"
+                    sh 'docker images'
+                }
+            }
+        }
+        
+        stage('Run Docker Container') {
+            steps {
+                script {
+                    echo 'Running Docker container...'
+                    try {
+                        sh "docker run -d -p 8000:8000 --name ${DOCKER_IMAGE}_container ${DOCKERHUB_REPO}"
+                    } catch (Exception e) {
+                        echo 'Failed to run Docker container'
+                        sh "docker logs ${DOCKER_IMAGE}_container || true"
+                        throw e
                     }
                 }
             }
         }
         
-        stage("Build Docker Image") {
+        stage('Check Running Containers') {
             steps {
                 script {
-                    // Build Docker image using Dockerfile in the repository
-                    def dockerImageTag = "${dockerRegistry}/${dockerImage}"
-                    docker.build(dockerImageTag)
+                    echo 'Checking running containers...'
+                    sh "docker ps"
                 }
             }
         }
         
-        stage("Push Docker Image") {
+        stage('Check Container Logs') {
             steps {
                 script {
-                    // Push Docker image to registry
-                    def dockerImageTag = "${dockerRegistry}/${dockerImage}"
-                    docker.withRegistry("${dockerRegistry}", "${registryCredential}") {
-                        dockerImage.push()
-                    }
-                }
-            }
-        }
-        
-        stage("Docker Logout") {
-            steps {
-                script {
-                    // Logout from Docker registry
-                    docker.withRegistry("${dockerRegistry}", "${registryCredential}") {
-                        docker.logout()
-                    }
+                    echo 'Checking container logs...'
+                    sh "docker logs ${DOCKER_IMAGE}_container || true"
                 }
             }
         }
     }
     
-    // Post-build actions
     post {
-        success {
-            echo 'Deployment successful!'
+        always {
+            script {
+                echo 'Performing cleanup...'
+                sh """
+                    docker rm -f ${DOCKER_IMAGE}_container || true
+                    docker rmi -f ${DOCKER_IMAGE} || true
+                """
+            }
         }
+        
+        success {
+            echo 'Pipeline completed successfully.'
+        }
+        
         failure {
-            echo 'Deployment failed!'
+            echo 'Pipeline failed.'
         }
     }
 }
