@@ -5,7 +5,7 @@ pipeline {
     environment {
         registryCredential = 'dockerhub_credentials_token' // Jenkins Credentials ID for Docker Hub
         dockerImage = "Flask-Smorest-API:latest"
-        dockerRegistry = 'https://docker.io' // Docker registry hostname (e.g., Docker Hub)
+        dockerRegistry = 'docker.io' // Docker registry hostname (e.g., Docker Hub)
         dockerHost = "tcp://docker-host:2376" // Docker host URL (if using a remote Docker host)
         githubCredentials = 'github_credentials_token' // Jenkins Credentials ID for GitHub
     }
@@ -19,11 +19,24 @@ pipeline {
             }
         }
         
+        stage("Docker Login") {
+            steps {
+                script {
+                    // Login to Docker registry
+                    docker.withRegistry("${dockerRegistry}", "${registryCredential}") {
+                        // Perform Docker login
+                        docker.login()
+                    }
+                }
+            }
+        }
+        
         stage("Build Docker Image") {
             steps {
                 script {
                     // Build Docker image using Dockerfile in the repository
-                    docker.build("${dockerRegistry}/${dockerImage}")
+                    def dockerImageTag = "${dockerRegistry}/${dockerImage}"
+                    docker.build(dockerImageTag)
                 }
             }
         }
@@ -31,10 +44,21 @@ pipeline {
         stage("Push Docker Image") {
             steps {
                 script {
-                    // Authenticate with Docker registry
+                    // Push Docker image to registry
+                    def dockerImageTag = "${dockerRegistry}/${dockerImage}"
                     docker.withRegistry("${dockerRegistry}", "${registryCredential}") {
-                        // Push Docker image to registry
                         dockerImage.push()
+                    }
+                }
+            }
+        }
+        
+        stage("Docker Logout") {
+            steps {
+                script {
+                    // Logout from Docker registry
+                    docker.withRegistry("${dockerRegistry}", "${registryCredential}") {
+                        docker.logout()
                     }
                 }
             }
