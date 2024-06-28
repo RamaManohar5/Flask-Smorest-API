@@ -58,9 +58,6 @@ WORKDIR $PYSETUP_PATH
 # Expose the application port
 EXPOSE 8000
 
-# Run Flask-Migrate commands to perform migrations
-RUN flask db migrate && flask db upgrade
-
 # entry point for dev
 ENTRYPOINT ["sh", "./entry_point_dev.sh"]
 
@@ -92,9 +89,6 @@ COPY ./restapi ./restapi
 
 # Expose the application port
 EXPOSE 80
-
-# Run Flask-Migrate commands to perform migrations
-RUN flask db migrate && flask db upgrade
 
 # Entry point for production
 ENTRYPOINT ["sh", "./entry_point_prod.sh"]

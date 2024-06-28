@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: development
-    image: flask-dev-image
+    image: ramamanohark555/flask_restful_api_repo
     container_name: flaks-dev-container
     ports:
       - "8000:8000"
@@ -21,7 +21,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: production
-    image: flask-prod-image
+    image: ramamanohark555/flask_restful_api_repo
     container_name: flaks-prod-container
     ports:
       - "80:80"

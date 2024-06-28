@@ -21,7 +21,7 @@ pipeline {
                 script {
                     // Build Docker image with the appropriate tag
                     // sh "docker build -t ${registry}:${BUILD_NUMBER} ."
-                    sh "docker build --no-cache -t ${registry} ."
+                    sh "docker compose --build --no-cahe flask-dev"
                     echo 'Build Image Completed'
                 }
             }
