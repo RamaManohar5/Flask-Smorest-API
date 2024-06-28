@@ -17,8 +17,8 @@ connection = redis.from_url(REDIS_URL)
 queue = Queue(QUEUES[0], connection=connection)
 DOMAIN = os.getenv("MAILGUN_DOMAIN")
 
-template_loader = jinja2.FileSystemLoader("templates")
-template_env = jinja2.environment(loader=template_loader)
+template_loader = jinja2.FileSystemLoader("./restapi/templates")
+template_env = jinja2.Environment(loader=template_loader)
 
 
 def render_template(template_filename, **context):
