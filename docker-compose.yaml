@@ -12,8 +12,6 @@ services:
       - .:/app
     networks:
       - flask-network
-    env_file:
-      - ./.env
     tty: true
 
   flask-prod:
@@ -29,8 +27,6 @@ services:
       - .:/app
     networks:
       - flask-network
-    env_file:
-      - ./.env
     tty: true
 
 networks:
