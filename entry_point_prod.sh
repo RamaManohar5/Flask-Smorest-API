@@ -1,15 +1,5 @@
 #!/bin/bash
 
-########### DB #############
-# Initialization
-#flask db init
-
-# Generate migrations
-flask db migrate
-
-# Apply migrations
-flask db upgrade
-
 # Start RQ worker for the 'emails' queue
 rq worker emails &
 
